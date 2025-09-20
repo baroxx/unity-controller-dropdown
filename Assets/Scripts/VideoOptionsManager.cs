@@ -52,29 +52,26 @@ public class VideoOptionsManager : MonoBehaviour
         if (items.Length > 0)
         {
             var selectedItem = items[currentResolutionIndex].GetComponent<RectTransform>();
-            var scrollRect = Resolution.GetComponentInChildren<ScrollRect>();
-
-            Canvas.ForceUpdateCanvases();
-            var contentPos = (Vector2) scrollRect.transform.InverseTransformPoint(scrollRect.content.position);
-            var childPos = (Vector2) scrollRect.transform.InverseTransformPoint(selectedItem.position);
-            childPos.y += selectedItem.rect.height;
-            var endPos = contentPos - childPos;
-            endPos.x = scrollRect.content.anchoredPosition.x;
-            scrollRect.content.anchoredPosition = endPos;
+            Scroll(selectedItem);
         }
     }
 
     public void Scroll(Toggle toggle)
     {
-        var selectedItem = toggle.gameObject.transform;
+        var selectedItem = toggle.GetComponent<RectTransform>();
+        Scroll(selectedItem);
+    }
+
+    private void Scroll(RectTransform selectedItem)
+    {
         var scrollRect = Resolution.GetComponentInChildren<ScrollRect>();
 
         Canvas.ForceUpdateCanvases();
         var contentPos = (Vector2)scrollRect.transform.InverseTransformPoint(scrollRect.content.position);
         var childPos = (Vector2)scrollRect.transform.InverseTransformPoint(selectedItem.position);
+        childPos.y += selectedItem.rect.height * 2;
         var endPos = contentPos - childPos;
         endPos.x = scrollRect.content.anchoredPosition.x;
-        endPos.y -= 40f;
         scrollRect.content.anchoredPosition = endPos;
     }
 }
